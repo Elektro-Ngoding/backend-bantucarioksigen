@@ -12,6 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const dataOksigen = require("./app/routes/bantucarioksigen");
 const auth = require("./app/routes/auth/index");
 const verifyToken = require("./app/configs/verifyToken");
+const shop = require("./app/routes/shop")
 
 app.get("/", (req, res) => {
   res.send("bantucari oksigen");
@@ -19,7 +20,7 @@ app.get("/", (req, res) => {
 app.use("/dataoksigen", dataOksigen);
 app.use("/auth", auth);
 app.use("/verifyToken", verifyToken);
-
+app.use("/product", shop)
 app.listen(port, () => {
   console.log(`app listening at http://localhost:${port}`);
 });
