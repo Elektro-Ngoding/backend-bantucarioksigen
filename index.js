@@ -17,7 +17,12 @@ const shop = require("./app/routes/shop");
 const resCAPTCHA = require("./app/configs/captcha");
 
 app.get("/", (req, res) => {
-  res.json([{ message: "Welcome to api bantucari oksigen" }]);
+  res.json([
+    {
+      message: "Welcome to api bantucari oksigen",
+      url: "github.com/elektro-ngoding/bantucarioksigen",
+    },
+  ]);
 });
 
 app.use("/dataoksigen", dataOksigen);
