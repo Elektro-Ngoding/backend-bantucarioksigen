@@ -20,7 +20,6 @@ app.get("/", (req, res) => {
   res.json([
     {
       message: "Welcome to api bantucari oksigen",
-      url: "github.com/elektro-ngoding/bantucarioksigen",
     },
   ]);
 });
