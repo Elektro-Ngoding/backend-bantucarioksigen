@@ -6,9 +6,7 @@
   "author": "elektro-ngoding",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon index.js",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "start": "nodemon index.js"
   },
   "dependencies": {
     "axios": "^0.21.1",
