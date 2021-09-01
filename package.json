@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon index.js",
-    "test": "cross-env NODE_ENV=test jest — testTimeout=10000"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -26,7 +27,7 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "jest": "^27.0.6",
+    "jest": "^27.1.0",
     "supertest": "^6.1.4"
   }
 }
