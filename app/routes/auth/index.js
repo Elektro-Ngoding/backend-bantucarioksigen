@@ -46,7 +46,6 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const { error } = loginValidate(req.body);
-
   if (error)
     return res.json({
       status: 400,
@@ -68,46 +67,53 @@ router.post("/login", async (req, res) => {
       message: "password anda salah",
     });
   const token = jsonwebtoken.sign({ _id: user._id }, process.env.SECRET_KEY);
-  res.json({
-    role: user.role,
-    verify: user.verify,
-    status: 200,
-    token: token,
-    id_mitra: user.id_mitra,
-  });
+  {
+    req.body.remember
+      ? //save expires 1 mounth
+        res
+          .cookie(
+            "user",
+            { token: token, id_mitra: user.id_mitra, role: user.role },
+            {
+              httpOnly: true,
+              expires: new Date(Date.now() + 2304000 * 1000),
+            }
+          )
+          .status(200)
+          .json({
+            role: user.role,
+            verify: user.verify,
+            status: 200,
+            id_mitra: user.id_mitra,
+          })
+      : //save session
+        res
+          .cookie(
+            "user",
+            { token: token, id_mitra: user.id_mitra, role: user.role },
+            {
+              httpOnly: true,
+              expires: new Date(Date.now() + 1800 * 1000),
+            }
+          )
+          .status(200)
+          .json({
+            role: user.role,
+            verify: user.verify,
+            status: 200,
+            id_mitra: user.id_mitra,
+          });
+  }
 });
 
-router.post("/loginadmin", async (req, res) => {
-  const { error } = loginValidate(req.body);
-
-  if (error)
-    return res.status(400).json({
-      message: error.detail[0].message,
-    });
-
-  const user = await AdminModel.findOne({ username: req.body.username });
-
-  if (!user)
-    return res.status(400).json({
-      message: "username not found",
-    });
-  const validPwd = await bcrypt.compare(req.body.password, user.password);
-  if (!validPwd)
-    return res.status(400).json({
-      message: "password anda salah",
-    });
-
-  const role = user.role;
-
-  if (!role || !role === "admin")
-    return res.status(400).json({
-      message: "sorry you can't login",
-    });
-
-  const token = jsonwebtoken.sign({ _id: user._id }, process.env.SECRET_KEY);
-  res.header("auth-token", token).json({
-    token: token,
-  });
+router.get("/logout", async (req, res) => {
+  res
+    .cookie("user", "none", {
+      httpOnly: true,
+      expires: new Date(Date.now() + 5 * 1000),
+    })
+    .status(200)
+    .json({ success: true, message: "User logged out successfully" });
 });
 
 router.get("/getMitra/:id", async (req, res) => {
@@ -137,16 +143,31 @@ router.delete("/:id", async (req, res) => {
 
 router.put("/updateMitra/:id", async (req, res) => {
   try {
-    const updateMitra = await AdminModel.updateOne({
-      id_mitra: req.body.id_mitra,
-      username: req.body.username,
-      password: req.body.password,
-      role: req.body.role,
-      verify: req.body.verify,
-    });
+    const _id = req.params.id;
+    const updateMitra = await AdminModel.findByIdAndUpdate(_id, req.body);
     res.json({
       status: updateMitra.status,
       message: "updateSuccess",
+    });
+  } catch (error) {
+    res.json({
+      message: error,
+    });
+  }
+});
+
+router.put("/updatePasswordMitra/:id", async (req, res) => {
+  try {
+    const _id = req.params.id;
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(req.body.password, salt);
+    const updateMitra = await AdminModel.findByIdAndUpdate(_id, {
+      password: hashPassword,
+    });
+
+    res.json({
+      status: updateMitra.status,
+      message: "Success Change Password",
     });
   } catch (error) {
     res.json({
