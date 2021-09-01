@@ -48,21 +48,24 @@ router.get("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   try {
-    const dataOksigenUpdate = await OksigenModel.updateOne({
-      namaToko: req.body.namaToko,
-      status: req.body.status,
-      data: {
-        provinsi: req.body.data.provinsi,
-        kota: req.body.data.kota,
-        alamat: req.body.data.alamat,
-        kontak: req.body.data.kontak,
-        statusBuka: req.body.data.statusBuka,
-        stokBarang: req.body.data.stokBarang,
-        antrian: req.body.data.antrian,
-        waktuBuka: req.body.data.waktuBuka,
-        waktuTutup: req.body.data.waktuTutup,
-      },
-    });
+    const dataOksigenUpdate = await OksigenModel.updateOne(
+      { _id: req.params.id },
+      {
+        namaToko: req.body.namaToko,
+        status: req.body.status,
+        data: {
+          provinsi: req.body.data.provinsi,
+          kota: req.body.data.kota,
+          alamat: req.body.data.alamat,
+          kontak: req.body.data.kontak,
+          statusBuka: req.body.data.statusBuka,
+          stokBarang: req.body.data.stokBarang,
+          antrian: req.body.data.antrian,
+          waktuBuka: req.body.data.waktuBuka,
+          waktuTutup: req.body.data.waktuTutup,
+        },
+      }
+    );
     res.json({
       status: 200,
       message: dataOksigenUpdate,
