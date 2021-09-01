@@ -3,8 +3,9 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 
 router.get("/", (req, res, next) => {
-  const token = req.header("token");
-  const id = req.header("user");
+  const token = req.cookies.user.token;
+  const id_mitra = req.cookies.user.id_mitra;
+  const role = req.cookies.user.role;
   if (!token)
     return res.json({
       status: 404,
@@ -15,6 +16,8 @@ router.get("/", (req, res, next) => {
     res.json({
       userLogIn: true,
       userId: verified._id,
+      id_mitra: id_mitra,
+      role: role,
       iat: verified.iat,
     });
   } catch (error) {
