@@ -15,11 +15,12 @@ const auth = require("./app/routes/auth/index");
 const verifyToken = require("./app/configs/verifyToken");
 const shop = require("./app/routes/shop");
 const resCAPTCHA = require("./app/configs/captcha");
+const info = require("./app/routes/info");
 
 app.get("/", (req, res) => {
   res.json([
     {
-      message: "Welcome to api bantucari oksigen",
+      message: "Welcome to api bantucari",
     },
   ]);
 });
@@ -29,6 +30,7 @@ app.use("/auth", auth);
 app.use("/verifyToken", verifyToken);
 app.use("/product", shop);
 app.use("/captcha", resCAPTCHA);
+app.use("/info", info);
 app.listen(port, () => {
   console.log(`app listening at http://localhost:${port}`);
 });
