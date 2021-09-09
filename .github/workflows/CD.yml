@@ -17,9 +17,9 @@ jobs:
     - name: deploy using ssh
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PRIVATE_KEY }}
+        host: 64.227.100.181
+        username: root
+        password: ${{secrets.PASSWORD}}
         port: 22
         script: 
          cd ~/backend-bantucarioksigen
